@@ -1,6 +1,6 @@
 package matrixemulator;
 
-public abstract class Instruction {
+public class Instruction {
 	private int opcode;
 	
 }

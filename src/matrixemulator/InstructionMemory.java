@@ -1,9 +1,17 @@
 package matrixemulator;
 
-public class InstructionMemory<Address, Instruction> implements MemoryInterface<Address, Instruction> {
+public class InstructionMemory<Address, I> implements MemoryInterface<Address, I> {
 
+	private Instruction[] raiz;
+	
+	
+	public InstructionMemory() {
+		// TODO Auto-generated constructor stub
+		raiz = new Instruction[2];
+	}
+	
 	@Override
-	public void put(Address a, Instruction v) {
+	public void put(Address a, I v) {
 		// TODO Auto-generated method stub
 		
 	}
