@@ -1,4 +1,7 @@
+package matrixemulator;
+
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
