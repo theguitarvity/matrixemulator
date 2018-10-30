@@ -16,10 +16,19 @@ public class Main {
 
     try {
       byte[] bytes = Files.readAllBytes(data);
+      List<Integer> integerArray = new ArrayList<>();
 
-      String teste = String.format("%8s", Integer.toBinaryString(bytes & 0xFF)).replace(' ', '0');
+      for(int i = 0; i+3 < bytes.length; i = i+3) {
+      	byte[] temp = new byte[4];
+      	temp[0] = bytes[i];
+      	temp[1] = bytes[i+1];
+      	temp[2] = bytes[i+2];
+      	temp[3] = bytes[i+3];
+      	int result = ByteBuffer.wrap(temp).getInt();
+      	integerArray.add(result);
+      }
 
-      System.out.println(teste);
+      decode(integerArray);
 
     } catch (IOException e) {
       System.out.println(e);
@@ -32,15 +41,5 @@ public class Main {
       System.out.println(instructions.get(i));
     }
   }
-
-  public static int[] convertToIntArray(byte[] input)
-	{
-	    int[] ret = new int[input.length];
-	    for (int i = 0; i < input.length; i++)
-	    {
-	        ret[i] = input[i];
-	    }
-	    return ret;
-	}
 
 }
