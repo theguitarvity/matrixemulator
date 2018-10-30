@@ -1,4 +1,7 @@
+package matrixemulator;
+
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +20,14 @@ public class Main {
     try {
       byte[] bytes = Files.readAllBytes(data);
 
-      String teste = String.format("%8s", Integer.toBinaryString(bytes & 0xFF)).replace(' ', '0');
+      for(int i = 0; i <bytes.length; i ++) {
+    	  String teste = String.format("%8s", Integer.toBinaryString(bytes[i] & 0xFF)).replace(' ', '0');
+    	  int op = (Integer.parseInt(new StringBuilder(teste).reverse().toString())&0xFF);
+    	  System.out.println(op);
+    	  
+      }
 
-      System.out.println(teste);
+      
 
     } catch (IOException e) {
       System.out.println(e);
