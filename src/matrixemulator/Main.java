@@ -28,6 +28,10 @@ public class Main {
       	temp[2] = bytes[i+2];
       	temp[3] = bytes[i+3];
       	int result = ByteBuffer.wrap(temp).getInt();
+      	
+      	// Little Endian ---- 
+      	// int result = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
       	integerArray.add(result);
       }
 
