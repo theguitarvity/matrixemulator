@@ -13,9 +13,6 @@ public class Memory {
 		byte[] b = new byte[4];
 		
 		while (input.read(b) != -1) {
-			if (memory.size() == 1027) {
-				int foo = 1;
-			}
 			long word = getUnsignedValue(b[0]);
 			word += getUnsignedValue(b[1]) << 8;
 			word += getUnsignedValue(b[2]) << 16;
@@ -26,9 +23,14 @@ public class Memory {
 	}
 
 	public long getValue(long location) {
+
 		long memoryAddress = location >> 2;
 		
 		if (memoryAddress >= memory.size()) {
+			System.out.println("LOCATION - - - - - - -");
+			System.out.println(memoryAddress);
+			System.out.println("SIZE - - - - - - -");
+			System.out.println(memory.size());
 			throw new IllegalArgumentException("Memory address out of bounds");
 		}
 	
@@ -39,6 +41,8 @@ public class Memory {
 		long memoryAddress = location >> 2;
 		
 		if (memoryAddress >= memory.size()) {
+			System.out.println("LOCATION - - - - - - -");
+			System.out.println(location);
 			throw new IllegalArgumentException("Memory address out of bounds");
 		}
 		memory.set((int)memoryAddress, value);

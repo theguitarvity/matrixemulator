@@ -25,6 +25,9 @@ public class Fetch extends Run {
 	
 	@Override
 	public void run() {
+		System.out.println("PC VALUE - - - - -");
+		System.out.println(pc.getValue());
+
 		long instruction = memory.getValue(pc.getValue());
 		//System.out.println(Integer.toHexString(instruction));
 		if_id.setValue(RegisterName.INSTRUCTION, instruction);
