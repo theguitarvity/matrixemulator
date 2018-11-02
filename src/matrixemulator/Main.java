@@ -1,52 +1,77 @@
 package matrixemulator;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.ByteBuffer;
+
+import matrixemulator.Register;
+import matrixemulator.Fetch;
+import matrixemulator.Memory;
 
 public class Main {
 
-  private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+  private final PC programCounter = new PC();
+
+  private final PipelineRegister if_id    = new PipelineRegister();
+
+  private final RegisterFile registerFile = new RegisterFile();
+
+  private final Fetch fetch;
 
   public static void main(String[] args) {
-
-    Path data = Paths.get(args[0]);
-
-    try {
-      byte[] bytes = Files.readAllBytes(data);
-      List<Integer> integerArray = new ArrayList<>();
-
-      for(int i = 0; i+3 < bytes.length; i = i+3) {
-      	byte[] temp = new byte[4];
-      	temp[0] = bytes[i];
-      	temp[1] = bytes[i+1];
-      	temp[2] = bytes[i+2];
-      	temp[3] = bytes[i+3];
-      	int result = ByteBuffer.wrap(temp).getInt();
-      	
-      	// Little Endian ---- 
-      	// int result = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
-
-      	integerArray.add(result);
+    if (args.length < 1) {
+      System.out.println("You must supply an input filename");
+    } else {
+      try {
+        // create the simulator
+        Main mips = new Main(args[0]);
+        
+        // run the simulator
+        mips.run();
+      } catch (IOException e) {
+        System.out.println("Error opening file named \"" + args[0] + "\"");
       }
-
-      decode(integerArray);
-
-    } catch (IOException e) {
-      System.out.println(e);
     }
+  }
+
+  public Main(String filename) throws IOException {
+
+    Memory memory = new Memory(filename);
+    
+    fetch = new Fetch(if_id, memory, programCounter);
+
+
+    // decode = new Decode(if_id, id_ex, registerFile, programCounter);
+    // execute = new Execute(id_ex, ex_mem, mem_wb);
+    // memory = new Memory(ex_mem, mem_wb, memoryStore);
+    // writeback = new Writeback(mem_wb, registerFile);
 
   }
 
-  public static void decode(List<Integer> instructions) {
-    for(int i = 0; i < instructions.size(); i++) {
-      System.out.println(instructions.get(i));
-    }
+  public void run() {
+    int instructionCount = 0;
+    int cycleCount = 0;
+    
+    fetch.run();
+      
+    // increment the cycle counter
+    cycleCount++;
+      
+    // tick over all our register values
+    tick();
+    
+    // compute the cycles per instruction
+    float cpi = (float)cycleCount / instructionCount;
+    
+    // output the results
+    System.out.println("Instruction count: \t" + instructionCount);
+    System.out.println("Cycle count: \t\t" + cycleCount);
+    System.out.println("CPI: \t\t\t" + cpi);
+    System.out.println(registerFile);
+
+  }
+
+  private void tick() {
+    programCounter.tick();
+    if_id.tick();
   }
 
 }

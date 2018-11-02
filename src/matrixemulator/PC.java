@@ -1,6 +1,15 @@
 package matrixemulator;
 
-public class PC<Instruction> {
-	private Instruction next;
+import matrixemulator.Register;
+
+public class PC extends Register {
+	private static final int FIRST_INSTRUCTION = 0x1000;
 	
+	public PC() {
+		super(FIRST_INSTRUCTION);
+	}
+	
+	public void increment() {
+		newValue = getValue() + 4;
+	}
 }
