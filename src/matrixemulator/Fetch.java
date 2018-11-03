@@ -29,7 +29,13 @@ public class Fetch extends Run {
 		System.out.println(pc.getValue());
 
 		long instruction = memory.getValue(pc.getValue());
-		//System.out.println(Integer.toHexString(instruction));
+
+		System.out.println("INSTRUCTION - - - - -");
+		System.out.println(instruction);
+
+		System.out.println(Long.toHexString(instruction));
+
+
 		if_id.setValue(RegisterName.INSTRUCTION, instruction);
 		if_id.setValue(RegisterName.OP_CODE, 0);
 		if_id.setValue(RegisterName.PC, pc.getValue());
