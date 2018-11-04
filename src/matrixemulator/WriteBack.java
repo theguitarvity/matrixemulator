@@ -15,10 +15,6 @@ public class WriteBack extends Run {
 		this.registerFile = registerFile;
 	}
 	
-	public boolean done() {
-		return mem_writeback.getValue(RegisterName.HALT) == 1;
-	}
-	
 	@Override
 	public void run() {
 		System.out.println("RUNNING WRITE BACK - - - - -");
