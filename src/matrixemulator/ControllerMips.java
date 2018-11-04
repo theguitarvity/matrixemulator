@@ -5,78 +5,72 @@ import matrixemulator.PipelineRegister;
 import matrixemulator.Run;
 
 public class ControllerMips extends Run {
-	private final PipelineRegister ex_mem;
-	private final PipelineRegister id_ex;
-	private final PipelineRegister mem_wb;
+	private final PipelineRegister execute_mem;
+	private final PipelineRegister decode_execute;
+	private final PipelineRegister mem_writeback;
 	
-	public ControllerMips(
-		PipelineRegister id_ex,
-		PipelineRegister ex_mem, 
-		PipelineRegister mem_wb
-	) {
-		this.ex_mem = ex_mem;
-		this.id_ex = id_ex;
-		this.mem_wb = mem_wb;
+	public ControllerMips(PipelineRegister decode_execute,PipelineRegister execute_mem, PipelineRegister mem_writeback) {
+		this.execute_mem = execute_mem;
+		this.decode_execute = decode_execute;
+		this.mem_writeback = mem_writeback;
 	}
 
 	@Override
 	public void run() {
 		long aluArg1, aluArg2, writeData;
 		
-		long dest = ex_mem.getValue(RegisterName.REG_DST) == 1 ?
-						ex_mem.getValue(RegisterName.R_D) :
-						ex_mem.getValue(RegisterName.R_T);
-		long dest2 = mem_wb.getValue(RegisterName.REG_DST) == 1 ?
-						mem_wb.getValue(RegisterName.R_D) :
-						mem_wb.getValue(RegisterName.R_T);
+		long dest = execute_mem.getValue(RegisterName.REG_DST) == 1 ?
+						execute_mem.getValue(RegisterName.R_D) :
+						execute_mem.getValue(RegisterName.R_T);
+		long dest2 = mem_writeback.getValue(RegisterName.REG_DST) == 1 ?
+						mem_writeback.getValue(RegisterName.R_D) :
+						mem_writeback.getValue(RegisterName.R_T);
 
 		System.out.println("DEST 1 E 2 - - - - -");
 		System.out.println(dest);
 		System.out.println(dest2);
 		
 		
-		if (ex_mem.getValue(RegisterName.REG_WRITE) == 1 && dest != 0 && dest == id_ex.getValue(RegisterName.R_S))
-		{
-			aluArg1 = ex_mem.getValue(RegisterName.ALU_RESULT);
-		} else if (mem_wb.getValue(RegisterName.REG_WRITE) == 1 && dest2 != 0 && dest2 == id_ex.getValue(RegisterName.R_S)) {
-			if (mem_wb.getValue(RegisterName.MEM_TO_REG) == 1) {
-				aluArg1 = mem_wb.getValue(RegisterName.MEM_RESULT);
+		if (execute_mem.getValue(RegisterName.REG_WRITE) == 1 && dest != 0 && dest == decode_execute.getValue(RegisterName.R_S)) {
+			aluArg1 = execute_mem.getValue(RegisterName.ALU_RESULT);
+		} else if (mem_writeback.getValue(RegisterName.REG_WRITE) == 1 && dest2 != 0 && dest2 == decode_execute.getValue(RegisterName.R_S)) {
+			if (mem_writeback.getValue(RegisterName.MEM_TO_REG) == 1) {
+				aluArg1 = mem_writeback.getValue(RegisterName.MEM_RESULT);
 			} else {
-				aluArg1 = mem_wb.getValue(RegisterName.ALU_RESULT);
+				aluArg1 = mem_writeback.getValue(RegisterName.ALU_RESULT);
 			}
 		} else {
-			aluArg1 = id_ex.getValue(RegisterName.READ_DATA_1);
+			aluArg1 = decode_execute.getValue(RegisterName.READ_DATA_1);
 		}
 		
 	
-		if (ex_mem.getValue(RegisterName.REG_WRITE) == 1 && dest != 0 &&  dest == id_ex.getValue(RegisterName.R_T))
-		{
-			writeData = ex_mem.getValue(RegisterName.ALU_RESULT);
-		} else if (mem_wb.getValue(RegisterName.REG_WRITE) == 1 && dest2 != 0 && dest2 == id_ex.getValue(RegisterName.R_T)) {
-			if (mem_wb.getValue(RegisterName.MEM_TO_REG) == 1) {
-				writeData = mem_wb.getValue(RegisterName.MEM_RESULT);
+		if (execute_mem.getValue(RegisterName.REG_WRITE) == 1 && dest != 0 &&  dest == decode_execute.getValue(RegisterName.R_T)) {
+			writeData = execute_mem.getValue(RegisterName.ALU_RESULT);
+		} else if (mem_writeback.getValue(RegisterName.REG_WRITE) == 1 && dest2 != 0 && dest2 == decode_execute.getValue(RegisterName.R_T)) {
+			if (mem_writeback.getValue(RegisterName.MEM_TO_REG) == 1) {
+				writeData = mem_writeback.getValue(RegisterName.MEM_RESULT);
 			} else {
-				writeData = mem_wb.getValue(RegisterName.ALU_RESULT);
+				writeData = mem_writeback.getValue(RegisterName.ALU_RESULT);
 			}
 		} else {
-			writeData = id_ex.getValue(RegisterName.READ_DATA_2);
+			writeData = decode_execute.getValue(RegisterName.READ_DATA_2);
 		}
 			
-		if (id_ex.getValue(RegisterName.ALU_SRC) == 0) {
+		if (decode_execute.getValue(RegisterName.ALU_SRC) == 0) {
 			aluArg2 = writeData;
 		} else {
-			aluArg2 = id_ex.getValue(RegisterName.IMMEDIATE);
+			aluArg2 = decode_execute.getValue(RegisterName.IMMEDIATE);
 		}
 		
-		id_ex.forwardValues(ex_mem);
+		decode_execute.forwardValues(execute_mem);
 		
 		long result = 0;
 
 		System.out.println("ALU OP - - - - -");
 
-		System.out.println((int)id_ex.getValue(RegisterName.ALU_OP));
+		System.out.println((int)decode_execute.getValue(RegisterName.ALU_OP));
 		
-		switch((int)id_ex.getValue(RegisterName.ALU_OP)) {
+		switch((int)decode_execute.getValue(RegisterName.ALU_OP)) {
 			case (0):
 				result = aluArg1 + aluArg2;
 				break;
@@ -102,7 +96,7 @@ public class ControllerMips extends Run {
 		System.out.println(result);
 		System.out.println(writeData);
 		
-		ex_mem.setValue(RegisterName.ALU_RESULT, result);
-		ex_mem.setValue(RegisterName.WRITE_DATA, writeData);
+		execute_mem.setValue(RegisterName.ALU_RESULT, result);
+		execute_mem.setValue(RegisterName.WRITE_DATA, writeData);
 	}
 }

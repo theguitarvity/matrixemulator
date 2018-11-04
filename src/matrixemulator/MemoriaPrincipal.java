@@ -13,10 +13,10 @@ public class MemoriaPrincipal {
 		byte[] b = new byte[4];
 		
 		while (input.read(b) != -1) {
-			long word = getUnsignedValue(b[0]);
-			word += getUnsignedValue(b[1]) << 8;
-			word += getUnsignedValue(b[2]) << 16;
-			word += getUnsignedValue(b[3]) << 24;
+			long word = unsignedValue(b[0]);
+			word += unsignedValue(b[1]) << 8;
+			word += unsignedValue(b[2]) << 16;
+			word += unsignedValue(b[3]) << 24;
 			
 			memory.add(word);
 		}
@@ -48,7 +48,7 @@ public class MemoriaPrincipal {
 		memory.set((int)memoryAddress, value);
 	}
 	
-	public long getUnsignedValue(byte b) {
+	public long unsignedValue(byte b) {
 		if (b >= 0) { return b; }
 		
 		return 256 + b;

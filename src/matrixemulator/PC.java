@@ -3,10 +3,10 @@ package matrixemulator;
 import matrixemulator.Register;
 
 public class PC extends Register {
-	private static final int FIRST_INSTRUCTION = 0x0000;
+	private static final int FIRST_INSTRUCTION_ADDRESS = 0x0000;
 	
 	public PC() {
-		super(FIRST_INSTRUCTION);
+		super(FIRST_INSTRUCTION_ADDRESS);
 	}
 	
 	public void increment() {

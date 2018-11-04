@@ -16,13 +16,13 @@ public class Main {
 
   private final PC programCounter = new PC();
 
-  private final PipelineRegister if_id      = new PipelineRegister();
+  private final PipelineRegister fetch_decode      = new PipelineRegister();
 
-  private final PipelineRegister id_ex      = new PipelineRegister();
+  private final PipelineRegister deocde_execution  = new PipelineRegister();
 
-  private final PipelineRegister ex_mem     = new PipelineRegister();
+  private final PipelineRegister execution_mem     = new PipelineRegister();
 
-  private final PipelineRegister mem_wb     = new PipelineRegister();
+  private final PipelineRegister mem_writeback     = new PipelineRegister();
 
   private final RegisterFile registerFile   = new RegisterFile();
 
@@ -37,13 +37,10 @@ public class Main {
       System.out.println("Aponte um arquivo binario");
     } else {
       try {
-        // create the simulator
         Main mips = new Main(args[0]);
-        
-        // run the simulator
         mips.run();
       } catch (IOException e) {
-        System.out.println("Error opening file named \"" + args[0] + "\"");
+        System.out.println("Erro ao abrir arquivo \"" + args[0] + "\"");
       }
     }
   }
@@ -53,18 +50,18 @@ public class Main {
     MemoriaPrincipal memory = new MemoriaPrincipal(filename);
     InstructionMemory inst = new InstructionMemory(filename);
     
-    fetch  = new Fetch(if_id, inst, programCounter);
-    decode = new Decode(if_id, id_ex, registerFile, programCounter);
-    exec   = new ControllerMips(id_ex, ex_mem, mem_wb);
+    fetch  = new Fetch(fetch_decode, inst, programCounter);
+    decode = new Decode(fetch_decode, deocde_execution, registerFile, programCounter);
+    exec   = new ControllerMips(deocde_execution, execution_mem, mem_writeback);
 
-    mem       = new Mem(ex_mem, mem_wb, memory);
-    writeback = new WriteBack(mem_wb, registerFile);
+    mem       = new Mem(execution_mem, mem_writeback, memory);
+    writeback = new WriteBack(mem_writeback, registerFile);
 
   }
 
   public void run() {
-    int instructionCount = 0;
-    int cycleCount = 0;
+    int cycle = 0;
+    int instrCount = 0;
     
     fetch.run();
     decode.run();
@@ -72,28 +69,24 @@ public class Main {
     mem.run();
     writeback.run();
 
-    // increment the cycle counter
-    cycleCount++;
+    // incrementa ciclo
+    cycle++;
       
-    // tick over all our register values
+    // clock pra todos os registradores
     tick();
     
-    // compute the cycles per instruction
-    float cpi = (float)cycleCount / instructionCount;
-    
-    // output the results
-    System.out.println("Número de instruções: \t" + instructionCount);
-    System.out.println("Ciclos executados: \t\t" + cycleCount);
-    System.out.println("CPI: \t\t\t" + cpi);
+    // output do resultado
+    System.out.println("Número de instruções: \t" + instrCount);
+    System.out.println("Ciclos executados: \t\t" + cycle);
     System.out.println(registerFile);
 
   }
 
   private void tick() {
     programCounter.tick();
-    if_id.tick();
-    id_ex.tick();
-    mem_wb.tick();
+    fetch_decode.tick();
+    deocde_execution.tick();
+    mem_writeback.tick();
   }
 
 }

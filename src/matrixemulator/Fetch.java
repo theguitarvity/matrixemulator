@@ -13,11 +13,7 @@ public class Fetch extends Run {
 	private final InstructionMemory memory;
 	private final PC pc;
 	
-	public Fetch(
-		PipelineRegister if_id, 
-		InstructionMemory memory, 
-		PC pc
-	) {
+	public Fetch( PipelineRegister if_id, InstructionMemory memory, PC pc) {
 		this.if_id = if_id;
 		this.memory = memory;
 		this.pc = pc;

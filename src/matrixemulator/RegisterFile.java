@@ -5,40 +5,20 @@ import java.util.HashMap;
 public class RegisterFile {
 
 	protected HashMap<RegisterName, Register> registers = new HashMap<RegisterName, Register>();
-
-	private boolean disableWrite = false;
-	
-	public void setValue(RegisterName registerName, long value) {
-		Register register = getRegister(registerName);
-		register.setValue(value);
-	}
 	
 	public long getValue(RegisterName registerName) {
 		return getRegister(registerName).getValue();
 	}
-	
-	public void disableWrite() {
-		disableWrite = true;
+
+	public void setValue(RegisterName registerName, long value) {
+		Register register = getRegister(registerName);
+		register.setValue(value);
 	}
 	
 	public void tick() {
 		for (Register register : registers.values()) {
 			register.tick();
 		} 
-	}
-	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < 32; i++) {
-			builder.append("$r");
-			builder.append(i);
-			builder.append('\t');
-			builder.append(Long.toHexString(getRegister(RegisterName.valueOf(i)).getValue()));
-			builder.append('\n');
-		}
-		
-		return builder.toString();
 	}
 	
 	protected boolean validRegister(RegisterName registerName) {
@@ -60,4 +40,18 @@ public class RegisterFile {
 		
 		return register;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < 32; i++) {
+			builder.append("$r");
+			builder.append(i);
+			builder.append('\t');
+			builder.append(Long.toHexString(getRegister(RegisterName.valueOf(i)).getValue()));
+			builder.append('\n');
+		}
+		
+		return builder.toString();
+	}
+	
 }

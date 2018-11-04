@@ -62,16 +62,16 @@ public enum RegisterName {
 	
 	private final boolean isPrimitive;
 	
-	private RegisterName() {
-		this(true);
-	}
-	
 	private RegisterName(boolean isPrimitive) {
 		this.isPrimitive = isPrimitive;
 	}
 	
 	public boolean isPrimitive() {
 		return isPrimitive;
+	}
+
+	private RegisterName() {
+		this(true);
 	}
 	
 	public static RegisterName valueOf(long ordinal) {
