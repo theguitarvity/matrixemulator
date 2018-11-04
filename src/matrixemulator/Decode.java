@@ -81,8 +81,7 @@ public class Decode extends Run {
 		decode_execute.setValue(RegisterName.ADDRESS, address);
 		decode_execute.setValue(RegisterName.OP_CODE, opCode);
 		
-		HashMap<RegisterName, Long> controlLines = 
-			setControlLines(opCode, funct);
+		HashMap<RegisterName, Long> controlLines = setControlLines(opCode, funct);
 		
 		long readData1 = registerFile.getValue(RegisterName.valueOf(rs));
 		long readData2 = registerFile.getValue(RegisterName.valueOf(rt));
@@ -111,8 +110,7 @@ public class Decode extends Run {
 	}
 	
 	private HashMap<RegisterName, Long> setControlLines(long opCode, long funct) {
-		HashMap<RegisterName, Long> values = 
-			new HashMap<RegisterName, Long>();
+		HashMap<RegisterName, Long> values = new HashMap<RegisterName, Long>();
 		
 		values.put(RegisterName.REG_DST, 0l);
 		decode_execute.setValue(RegisterName.REG_DST, 0l);
