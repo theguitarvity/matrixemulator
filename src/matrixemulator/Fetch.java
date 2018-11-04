@@ -1,6 +1,6 @@
 package matrixemulator; 
 
-import matrixemulator.Memory;
+import matrixemulator.MemoriaPrincipal;
 import matrixemulator.PC;
 import matrixemulator.Run;
 import matrixemulator.RegisterName;
@@ -10,12 +10,12 @@ public class Fetch extends Run {
 	private static final int HALT_INSTRUCTION = 0xFC000000; 
 	
 	private final PipelineRegister if_id;
-	private final Memory memory;
+	private final InstructionMemory memory;
 	private final PC pc;
 	
 	public Fetch(
 		PipelineRegister if_id, 
-		Memory memory, 
+		InstructionMemory memory, 
 		PC pc
 	) {
 		this.if_id = if_id;
@@ -28,7 +28,7 @@ public class Fetch extends Run {
 		System.out.println("PC VALUE - - - - -");
 		System.out.println(pc.getValue());
 
-		long instruction = memory.getValue(pc.getValue());
+		long instruction = memory.instrucoes().get((int) pc.getValue());
 
 		System.out.println("INSTRUCTION - - - - -");
 		System.out.println(instruction);

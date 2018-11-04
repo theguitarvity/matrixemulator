@@ -1,6 +1,6 @@
 package matrixemulator;
 
-import matrixemulator.Memory;
+import matrixemulator.MemoriaPrincipal;
 import matrixemulator.RegisterName;
 import matrixemulator.PipelineRegister;
 import matrixemulator.Run;
@@ -9,12 +9,12 @@ public class Mem extends Run {
 
 	private final PipelineRegister ex_mem;
 	private final PipelineRegister mem_wb;
-	private final Memory memory;
+	private final MemoriaPrincipal memory;
 	
 	public Mem(
 		PipelineRegister ex_mem,
 		PipelineRegister mem_wb,
-		Memory memory
+		MemoriaPrincipal memory
 	) {
 		this.ex_mem = ex_mem;
 		this.mem_wb = mem_wb;

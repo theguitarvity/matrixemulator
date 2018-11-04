@@ -4,12 +4,12 @@ import matrixemulator.RegisterName;
 import matrixemulator.PipelineRegister;
 import matrixemulator.Run;
 
-public class Exec extends Run {
+public class ControllerMips extends Run {
 	private final PipelineRegister ex_mem;
 	private final PipelineRegister id_ex;
 	private final PipelineRegister mem_wb;
 	
-	public Exec(
+	public ControllerMips(
 		PipelineRegister id_ex,
 		PipelineRegister ex_mem, 
 		PipelineRegister mem_wb

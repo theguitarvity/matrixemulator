@@ -1,31 +1,32 @@
 package matrixemulator;
 
-public class InstructionMemory<Address, I> implements MemoryInterface<Address, I> {
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
-	private Instruction[] raiz;
-	
-	
-	public InstructionMemory() {
-		// TODO Auto-generated constructor stub
-		raiz = new Instruction[2];
-	}
-	
-	@Override
-	public void put(Address a, I v) {
-		// TODO Auto-generated method stub
+public class InstructionMemory{
+
+	private ArrayList<Long> mem = new ArrayList<Long>();
+	public InstructionMemory(String file) throws IOException{
+		FileInputStream in = new FileInputStream(file);
+		byte[] b = new byte[4];
+		while(in.read(b)!=-1) {
+			long word = getUnsignedValue(b[0]);
+			word += getUnsignedValue(b[1]) << 8;
+			word += getUnsignedValue(b[2]) << 16;
+			word += getUnsignedValue(b[3]) << 24;
+			mem.add(word);
+		}
 		
 	}
-
-	@Override
-	public void pop(Address a) {
-		// TODO Auto-generated method stub
-		
+	public ArrayList<Long> instrucoes(){
+		return mem;
 	}
-
-	@Override
-	public void next() {
+	private long getUnsignedValue(byte b) {
 		// TODO Auto-generated method stub
-		
+		if(b>=0)
+			return b;
+		return 256+b;
 	}
 
 }

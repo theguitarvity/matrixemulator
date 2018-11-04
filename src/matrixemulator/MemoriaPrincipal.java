@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class Memory {
+public class MemoriaPrincipal {
 	private ArrayList<Long> memory = new ArrayList<Long>();
 	            
-	public Memory(String filename) throws IOException {
+	public MemoriaPrincipal(String filename) throws IOException {
 		FileInputStream input = new FileInputStream(filename);
 		
 		byte[] b = new byte[4];
@@ -27,11 +27,11 @@ public class Memory {
 		long memoryAddress = location >> 2;
 		
 		if (memoryAddress >= memory.size()) {
-			System.out.println("LOCATION - - - - - - -");
+			System.out.println("Endereço - - - - - - -");
 			System.out.println(memoryAddress);
-			System.out.println("SIZE - - - - - - -");
+			System.out.println("Tamanho - - - - - - -");
 			System.out.println(memory.size());
-			throw new IllegalArgumentException("Memory address out of bounds");
+			throw new IllegalArgumentException("Endereço fora do limite");
 		}
 	
 		return memory.get((int)memoryAddress);

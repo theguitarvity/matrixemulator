@@ -113,7 +113,7 @@ public class Decode extends Run {
 				jumpAddress = readData1;
 				
 				if (jumpAddress % 4 != 0) {
-					throw new IllegalArgumentException("jump register value not divisible by four");
+					throw new IllegalArgumentException("Valor do jump não é divisivel por 4");
 				}
 				
 				jumpAddress /= 4;

@@ -3,12 +3,12 @@ package matrixemulator;
 import java.io.IOException;
 
 import matrixemulator.Register;
-import matrixemulator.Memory;
+import matrixemulator.MemoriaPrincipal;
 
 
 import matrixemulator.Fetch;
 import matrixemulator.Decode;
-import matrixemulator.Exec;
+import matrixemulator.ControllerMips;
 import matrixemulator.Mem;
 import matrixemulator.WriteBack;
 
@@ -28,13 +28,13 @@ public class Main {
 
   private final Fetch fetch;
   private final Decode decode;
-  private final Exec exec;
+  private final ControllerMips exec;
   private final Mem mem;
   private final WriteBack writeback;
 
   public static void main(String[] args) {
     if (args.length < 1) {
-      System.out.println("You must supply an input filename");
+      System.out.println("Aponte um arquivo binario");
     } else {
       try {
         // create the simulator
@@ -50,11 +50,12 @@ public class Main {
 
   public Main(String filename) throws IOException {
 
-    Memory memory = new Memory(filename);
+    MemoriaPrincipal memory = new MemoriaPrincipal(filename);
+    InstructionMemory inst = new InstructionMemory(filename);
     
-    fetch  = new Fetch(if_id, memory, programCounter);
+    fetch  = new Fetch(if_id, inst, programCounter);
     decode = new Decode(if_id, id_ex, registerFile, programCounter);
-    exec   = new Exec(id_ex, ex_mem, mem_wb);
+    exec   = new ControllerMips(id_ex, ex_mem, mem_wb);
 
     mem       = new Mem(ex_mem, mem_wb, memory);
     writeback = new WriteBack(mem_wb, registerFile);
@@ -81,8 +82,8 @@ public class Main {
     float cpi = (float)cycleCount / instructionCount;
     
     // output the results
-    System.out.println("Instruction count: \t" + instructionCount);
-    System.out.println("Cycle count: \t\t" + cycleCount);
+    System.out.println("Número de instruções: \t" + instructionCount);
+    System.out.println("Ciclos executados: \t\t" + cycleCount);
     System.out.println("CPI: \t\t\t" + cpi);
     System.out.println(registerFile);
 
