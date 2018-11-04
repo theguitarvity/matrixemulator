@@ -22,20 +22,6 @@ public class WriteBack extends Run {
 		return mem_wb.getValue(RegisterName.HALT) == 1;
 	}
 	
-	public boolean isNop() {
-		return mem_wb.getValue(RegisterName.REG_DST) == 0 &&
-			mem_wb.getValue(RegisterName.ALU_SRC) == 0 &&
-			mem_wb.getValue(RegisterName.MEM_TO_REG) == 0 &&
-			mem_wb.getValue(RegisterName.REG_WRITE) == 0 &&
-			mem_wb.getValue(RegisterName.MEM_READ) == 0 &&
-			mem_wb.getValue(RegisterName.MEM_WRITE) == 0 &&
-			mem_wb.getValue(RegisterName.BRANCH) == 0 &&
-			mem_wb.getValue(RegisterName.BRANCH_NE) == 0 &&
-			mem_wb.getValue(RegisterName.JUMP) == 0 &&
-			mem_wb.getValue(RegisterName.JUMP_SRC) == 0 &&
-			mem_wb.getValue(RegisterName.ALU_OP) == 0;
-	}
-	
 	@Override
 	public void run() {
 		System.out.println("RUNNING WRITE BACK - - - - -");
